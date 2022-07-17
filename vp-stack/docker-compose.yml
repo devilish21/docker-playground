@@ -1,0 +1,38 @@
+version: '3'
+services:
+  build_maven:
+    build: 
+      context: ./build
+    command: ls -lrt ./target
+  db01:
+    build:
+      context: ./mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - dbdata:/var/lib/mysql
+  mc01:
+    build: 
+      context: ./memcached
+    ports:
+      - 11211:11211
+  rmq01:
+    build: 
+      context: ./rabbitmq
+    ports:
+      - 15672:15672
+  app:
+    build: 
+      context: ./tomcat
+    ports:
+      - 8080:8080
+    volumes:
+      - appdata:/usr/local/tomcat/webapps
+  nginx:
+    build: 
+      context: ./nginx
+    ports:
+      - 80:80
+volumes:
+  dbdata: {}
+  appdata: {}
